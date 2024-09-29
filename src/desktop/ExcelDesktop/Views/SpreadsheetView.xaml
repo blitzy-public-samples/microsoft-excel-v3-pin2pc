@@ -1,0 +1,72 @@
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ExcelDesktop.ViewModels"
+             xmlns:utils="clr-namespace:ExcelDesktop.Utils"
+             d:DataContext="{d:DesignInstance Type=vm:SpreadsheetViewModel}"
+             mc:Ignorable="d"
+             Width="Auto" Height="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Main Menu -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="New" Command="{Binding NewWorkbookCommand}"/>
+                <MenuItem Header="Open" Command="{Binding OpenWorkbookCommand}"/>
+                <MenuItem Header="Save" Command="{Binding SaveWorkbookCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Edit"/>
+            <MenuItem Header="View"/>
+            <MenuItem Header="Insert">
+                <MenuItem Header="Chart" Command="{Binding CreateChartCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="1">
+            <Button Content="New" Command="{Binding NewWorkbookCommand}"/>
+            <Button Content="Open" Command="{Binding OpenWorkbookCommand}"/>
+            <Button Content="Save" Command="{Binding SaveWorkbookCommand}"/>
+            <Separator/>
+            <Button Content="Add Sheet" Command="{Binding AddWorksheetCommand}"/>
+            <Button Content="Remove Sheet" Command="{Binding RemoveWorksheetCommand}"/>
+        </ToolBar>
+
+        <!-- Formula Bar and Spreadsheet Grid -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Formula Bar -->
+            <TextBox Grid.Row="0" Text="{Binding FormulaBarText, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- Spreadsheet Grid -->
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding ActiveWorksheet.Cells}" 
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      SelectedItem="{Binding SelectedCell, Mode=TwoWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="A" Binding="{Binding Value}"/>
+                    <DataGridTextColumn Header="B" Binding="{Binding Value}"/>
+                    <DataGridTextColumn Header="C" Binding="{Binding Value}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="3">
+            <TextBlock Text="{Binding StatusMessage}"/>
+        </StatusBar>
+    </Grid>
+</UserControl>

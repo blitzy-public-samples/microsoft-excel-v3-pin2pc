@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/excelToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/boldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_bold"
+                    android:contentDescription="@string/bold_description" />
+
+                <ImageButton
+                    android:id="@+id/italicButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_italic"
+                    android:contentDescription="@string/italic_description" />
+
+                <ImageButton
+                    android:id="@+id/underlineButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_underline"
+                    android:contentDescription="@string/underline_description" />
+
+                <ImageButton
+                    android:id="@+id/alignLeftButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_align_left"
+                    android:contentDescription="@string/align_left_description" />
+
+                <ImageButton
+                    android:id="@+id/alignCenterButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_align_center"
+                    android:contentDescription="@string/align_center_description" />
+
+                <ImageButton
+                    android:id="@+id/alignRightButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_format_align_right"
+                    android:contentDescription="@string/align_right_description" />
+
+                <ImageButton
+                    android:id="@+id/insertChartButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_insert_chart"
+                    android:contentDescription="@string/insert_chart_description" />
+
+                <ImageButton
+                    android:id="@+id/insertFormulaButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_functions"
+                    android:contentDescription="@string/insert_formula_description" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.appcompat.widget.Toolbar>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!-- TODO: Human Tasks
+1. Create custom drawable resources for Excel-specific icons (e.g., ic_format_bold, ic_insert_chart, ic_functions)
+2. Optimize layout for different screen sizes and orientations
+3. Implement accessibility features, such as content descriptions for all buttons
+4. Design and implement additional Excel-specific toolbar buttons
+-->

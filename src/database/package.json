@@ -1,0 +1,41 @@
+{
+  "name": "@microsoft/excel-database",
+  "version": "1.0.0",
+  "description": "Database module for Microsoft Excel",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint . --ext .ts",
+    "migrate": "ts-node scripts/runMigrations.ts",
+    "seed": "ts-node scripts/seedDatabase.ts"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^3.17.3",
+    "@azure/storage-blob": "^12.13.0",
+    "mssql": "^9.1.1",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.15"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.39.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/excel.git"
+  },
+  "author": "Microsoft Corporation",
+  "license": "MIT"
+}

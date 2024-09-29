@@ -1,0 +1,35 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'smtp.office365.com:587'
+  smtp_from: 'alerts@excel-monitoring.microsoft.com'
+  smtp_auth_username: 'alerts@excel-monitoring.microsoft.com'
+  smtp_auth_password: '${SMTP_AUTH_PASSWORD}'
+  smtp_require_tls: true
+
+route:
+  group_by: ['cluster', 'alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'excel-ops-team'
+
+receivers:
+  - name: 'excel-ops-team'
+    email_configs:
+      - to: 'excel-ops@microsoft.com'
+        send_resolved: true
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'cluster', 'service']
+
+# Human tasks:
+# TODO: Replace ${SMTP_AUTH_PASSWORD} with the actual SMTP authentication password
+# TODO: Replace ${PAGERDUTY_SERVICE_KEY} with the actual PagerDuty service key
+# TODO: Review and adjust email addresses, smart host, and other configuration details to match the Excel team's specific setup
+# TODO: Consider adding more specific routing rules based on the Excel application's components and team structure

@@ -1,0 +1,60 @@
+# Database StatefulSet configuration for Excel application
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: excel-database
+  labels:
+    app: excel
+    tier: database
+spec:
+  serviceName: excel-database
+  replicas: 3
+  selector:
+    matchLabels:
+      app: excel
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: excel
+        tier: database
+    spec:
+      containers:
+      - name: excel-database
+        image: {{ DATABASE_IMAGE }}:{{ DATABASE_TAG }}
+        ports:
+        - containerPort: 1433
+          name: db-port
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: excel-db-secrets
+              key: sa-password
+        volumeMounts:
+        - name: excel-database-storage
+          mountPath: /var/opt/mssql
+        resources:
+          requests:
+            memory: 2Gi
+            cpu: "1"
+          limits:
+            memory: 4Gi
+            cpu: "2"
+  volumeClaimTemplates:
+  - metadata:
+      name: excel-database-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: azure-disk
+      resources:
+        requests:
+          storage: 20Gi
+
+# Human tasks:
+# TODO: Review and set appropriate resource limits and requests based on expected workload and available cluster resources
+# TODO: Ensure the database image and tag are correctly set in the deployment pipeline
+# TODO: Verify that the excel-db-secrets Kubernetes Secret is created with the correct SA_PASSWORD before deploying this StatefulSet
+# TODO: Confirm that the azure-disk storage class is available in the target Kubernetes cluster

@@ -1,0 +1,376 @@
+trigger:
+  - main
+  - develop
+  - feature/*
+  - hotfix/*
+  - release/*
+
+variables:
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotnetVersion
+    value: '6.0.x'
+  - name: nodeVersion
+    value: '14.x'
+
+stages:
+  - stage: Build
+    displayName: 'Build'
+    jobs:
+      - job: BuildBackend
+        displayName: 'Build Backend'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              version: $(dotnetVersion)
+            displayName: 'Use .NET Core SDK $(dotnetVersion)'
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'restore'
+              projects: '**/backend/*.csproj'
+            displayName: 'Restore NuGet packages'
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'build'
+              projects: '**/backend/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'
+            displayName: 'Build backend solution'
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'test'
+              projects: '**/backend/*.Tests.csproj'
+              arguments: '--configuration $(buildConfiguration)'
+            displayName: 'Run backend unit tests'
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'publish'
+              publishWebProjects: true
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/backend'
+            displayName: 'Publish backend artifacts'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/backend'
+              artifactName: 'backend'
+            displayName: 'Publish backend build artifacts'
+
+      - job: BuildFrontend
+        displayName: 'Build Frontend'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Use Node.js $(nodeVersion)'
+          
+          - script: |
+              cd src/frontend
+              npm ci
+            displayName: 'Install npm dependencies'
+          
+          - script: |
+              cd src/frontend
+              npm run build
+            displayName: 'Build frontend application'
+          
+          - script: |
+              cd src/frontend
+              npm test
+            displayName: 'Run frontend unit tests'
+          
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: 'src/frontend/build'
+              contents: '**'
+              targetFolder: '$(Build.ArtifactStagingDirectory)/frontend'
+            displayName: 'Copy frontend build files'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/frontend'
+              artifactName: 'frontend'
+            displayName: 'Publish frontend build artifacts'
+
+      - job: BuildMobile
+        displayName: 'Build Mobile'
+        pool:
+          vmImage: 'macos-latest'
+        steps:
+          - task: UseXamarinSDK@0
+            inputs:
+              versionSpec: '6.x'
+            displayName: 'Install Xamarin'
+          
+          - task: NuGetCommand@2
+            inputs:
+              restoreSolution: '**/src/mobile/**/*.sln'
+            displayName: 'Restore NuGet packages for mobile projects'
+          
+          - task: XamariniOS@2
+            inputs:
+              solutionFile: '**/src/mobile/ios/*.sln'
+              configuration: 'Release'
+            displayName: 'Build iOS app'
+          
+          - task: XamarinAndroid@1
+            inputs:
+              projectFile: '**/src/mobile/android/**/*.csproj'
+              configuration: 'Release'
+            displayName: 'Build Android app'
+          
+          - task: VSTest@2
+            inputs:
+              testAssemblyVer2: |
+                **/src/mobile/**/*Tests.dll
+                !**/obj/**
+              configuration: 'Release'
+            displayName: 'Run mobile unit tests'
+          
+          - task: CopyFiles@2
+            inputs:
+              contents: |
+                **/src/mobile/**/*.ipa
+                **/src/mobile/**/*.apk
+              targetFolder: '$(Build.ArtifactStagingDirectory)/mobile'
+            displayName: 'Copy mobile artifacts'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/mobile'
+              artifactName: 'mobile'
+            displayName: 'Publish mobile build artifacts'
+
+      - job: BuildDesktop
+        displayName: 'Build Desktop'
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: NuGetToolInstaller@1
+            displayName: 'Use NuGet'
+          
+          - task: NuGetCommand@2
+            inputs:
+              restoreSolution: '**/src/desktop/**/*.sln'
+            displayName: 'Restore NuGet packages for desktop project'
+          
+          - task: VSBuild@1
+            inputs:
+              solution: '**/src/desktop/**/*.sln'
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)/desktop"'
+              platform: 'Any CPU'
+              configuration: 'Release'
+            displayName: 'Build desktop application'
+          
+          - task: VSTest@2
+            inputs:
+              testAssemblyVer2: |
+                **/src/desktop/**/*Tests.dll
+                !**/obj/**
+              platform: 'Any CPU'
+              configuration: 'Release'
+            displayName: 'Run desktop unit tests'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/desktop'
+              artifactName: 'desktop'
+            displayName: 'Publish desktop build artifacts'
+
+  - stage: Test
+    displayName: 'Test'
+    jobs:
+      - job: IntegrationTests
+        displayName: 'Integration Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'backend'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'Resource Manager Connection'
+              appName: 'excel-test-environment'
+              appType: 'webApp'
+              deployToSlotOrASE: true
+              resourceGroupName: 'excel-test-rg'
+              slotName: 'test'
+              package: '$(System.ArtifactsDirectory)/backend/**/*.zip'
+            displayName: 'Deploy to test environment'
+          
+          - script: |
+              dotnet test backend/tests/integration/api.test.ts
+            displayName: 'Run API integration tests'
+          
+          - script: |
+              npm run test:integration
+            workingDirectory: src/frontend
+            displayName: 'Run web app integration tests'
+          
+          - script: |
+              dotnet test src/mobile/tests/integration
+            displayName: 'Run mobile integration tests'
+          
+          - script: |
+              dotnet test src/desktop/ExcelDesktop.Tests/bin/Release/ExcelDesktop.Tests.dll
+            displayName: 'Run desktop integration tests'
+
+      - job: E2ETests
+        displayName: 'End-to-End Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - script: |
+              npm install -g cypress
+              cypress run
+            workingDirectory: src/frontend
+            displayName: 'Run web E2E tests'
+          
+          - script: |
+              npm install -g appium
+              appium &
+              mvn test -Dtest=MobileE2ETests
+            displayName: 'Run mobile E2E tests'
+          
+          - script: |
+              dotnet test src/desktop/ExcelDesktop.E2ETests/bin/Release/ExcelDesktop.E2ETests.dll
+            displayName: 'Run desktop E2E tests'
+
+  - stage: Deploy
+    displayName: 'Deploy'
+    jobs:
+      - deployment: DeployToStaging
+        displayName: 'Deploy to Staging'
+        environment: 'staging'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'Resource Manager Connection'
+                    appName: 'excel-staging'
+                    appType: 'webApp'
+                    deployToSlotOrASE: true
+                    resourceGroupName: 'excel-staging-rg'
+                    slotName: 'production'
+                    package: '$(Pipeline.Workspace)/backend/backend.zip'
+                  displayName: 'Deploy backend to staging'
+                
+                - task: AzureStaticWebApp@0
+                  inputs:
+                    azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN_STAGING)
+                    app_location: '$(Pipeline.Workspace)/frontend'
+                    output_location: 'build'
+                  displayName: 'Deploy frontend to staging'
+                
+                - task: AppCenterDistribute@3
+                  inputs:
+                    serverEndpoint: 'App Center Connection'
+                    appSlug: 'Excel-Mobile/iOS'
+                    appFile: '$(Pipeline.Workspace)/mobile/*.ipa'
+                    releaseNotesOption: 'input'
+                    releaseNotesInput: 'New build deployed to TestFlight'
+                    destinationType: 'groups'
+                  displayName: 'Deploy iOS app to TestFlight'
+                
+                - task: AppCenterDistribute@3
+                  inputs:
+                    serverEndpoint: 'App Center Connection'
+                    appSlug: 'Excel-Mobile/Android'
+                    appFile: '$(Pipeline.Workspace)/mobile/*.apk'
+                    releaseNotesOption: 'input'
+                    releaseNotesInput: 'New build deployed to Play Store (beta)'
+                    destinationType: 'store'
+                    destinationStoreId: 'beta'
+                  displayName: 'Deploy Android app to Play Store (beta)'
+                
+                - task: AzureFileCopy@4
+                  inputs:
+                    SourcePath: '$(Pipeline.Workspace)/desktop'
+                    azureSubscription: 'Resource Manager Connection'
+                    Destination: 'AzureBlob'
+                    storage: 'exceldesktopstaging'
+                    ContainerName: 'releases'
+                  displayName: 'Deploy desktop app to staging distribution channel'
+
+      - deployment: DeployToProduction
+        displayName: 'Deploy to Production'
+        environment: 'production'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'Resource Manager Connection'
+                    appName: 'excel-production'
+                    appType: 'webApp'
+                    deployToSlotOrASE: false
+                    resourceGroupName: 'excel-production-rg'
+                    package: '$(Pipeline.Workspace)/backend/backend.zip'
+                  displayName: 'Deploy backend to production'
+                
+                - task: AzureStaticWebApp@0
+                  inputs:
+                    azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN_PRODUCTION)
+                    app_location: '$(Pipeline.Workspace)/frontend'
+                    output_location: 'build'
+                  displayName: 'Deploy frontend to production'
+                
+                - task: AppCenterDistribute@3
+                  inputs:
+                    serverEndpoint: 'App Center Connection'
+                    appSlug: 'Excel-Mobile/iOS'
+                    appFile: '$(Pipeline.Workspace)/mobile/*.ipa'
+                    releaseNotesOption: 'input'
+                    releaseNotesInput: 'New version available on the App Store'
+                    destinationType: 'store'
+                    destinationStoreId: 'production'
+                  displayName: 'Deploy iOS app to App Store'
+                
+                - task: AppCenterDistribute@3
+                  inputs:
+                    serverEndpoint: 'App Center Connection'
+                    appSlug: 'Excel-Mobile/Android'
+                    appFile: '$(Pipeline.Workspace)/mobile/*.apk'
+                    releaseNotesOption: 'input'
+                    releaseNotesInput: 'New version available on the Play Store'
+                    destinationType: 'store'
+                    destinationStoreId: 'production'
+                  displayName: 'Deploy Android app to Play Store'
+                
+                - task: AzureFileCopy@4
+                  inputs:
+                    SourcePath: '$(Pipeline.Workspace)/desktop'
+                    azureSubscription: 'Resource Manager Connection'
+                    Destination: 'AzureBlob'
+                    storage: 'exceldesktopproduction'
+                    ContainerName: 'releases'
+                  displayName: 'Deploy desktop app to production distribution channel'
+
+```
+
+Human Tasks:
+```yaml
+# Human Tasks:
+# - Review and adjust the pipeline stages, jobs, and steps to match the specific build and deployment requirements of the Excel project
+# - Configure environment-specific variables and secrets in Azure DevOps
+# - Set up appropriate service connections in Azure DevOps for deployment to various environments
+# - Implement and configure any required approval gates for production deployments
+# - Integrate code coverage and static code analysis tools into the build process

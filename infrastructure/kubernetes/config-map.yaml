@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: excel-config
+  namespace: default
+data:
+  API_URL: "http://excel-api-service:8080"
+  FRONTEND_URL: "http://excel-frontend-service"
+  LOG_LEVEL: "info"
+  MAX_WORKSHEET_SIZE: "1000000"
+  ENABLE_REAL_TIME_COLLABORATION: "true"
+  CALCULATION_ENGINE_THREADS: "4"
+  CHART_RENDER_QUALITY: "high"
+  FORMULA_CACHE_SIZE: "1000"
+  TELEMETRY_ENABLED: "true"
+
+# Human Tasks:
+# - Review and adjust configuration values based on production requirements and performance testing
+# - Ensure that sensitive configuration data is not stored in this ConfigMap, use Secrets instead
+# - Verify that all services (API, frontend, etc.) are configured to use this ConfigMap

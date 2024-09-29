@@ -1,0 +1,549 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Microsoft Excel API",
+    "version": "1.0.0",
+    "description": "API for interacting with Microsoft Excel workbooks, worksheets, cells, formulas, and charts."
+  },
+  "servers": [
+    {
+      "url": "https://api.excel.microsoft.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://api-staging.excel.microsoft.com/v1",
+      "description": "Staging server"
+    }
+  ],
+  "paths": {
+    "/workbooks": {
+      "get": {
+        "summary": "List workbooks",
+        "description": "Retrieve a list of workbooks accessible to the authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Workbook"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create workbook",
+        "description": "Create a new workbook.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkbookCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Workbook created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Workbook"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workbooks/{workbookId}": {
+      "get": {
+        "summary": "Get workbook",
+        "description": "Retrieve details of a specific workbook.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Workbook"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update workbook",
+        "description": "Update details of a specific workbook.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkbookUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workbook updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Workbook"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete workbook",
+        "description": "Delete a specific workbook.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Workbook deleted successfully"
+          }
+        }
+      }
+    },
+    "/worksheets": {
+      "get": {
+        "summary": "List worksheets",
+        "description": "Retrieve a list of worksheets in a workbook.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Worksheet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create worksheet",
+        "description": "Create a new worksheet in a workbook.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorksheetCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Worksheet created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Worksheet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cells": {
+      "get": {
+        "summary": "Get cells",
+        "description": "Retrieve cell data from a worksheet.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "worksheetId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cell"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update cells",
+        "description": "Update cell data in a worksheet.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workbookId": {
+                    "type": "string"
+                  },
+                  "worksheetId": {
+                    "type": "string"
+                  },
+                  "cells": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cell"
+                    }
+                  }
+                },
+                "required": ["workbookId", "worksheetId", "cells"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cells updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cell"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/formulas": {
+      "post": {
+        "summary": "Evaluate formula",
+        "description": "Evaluate a formula and return the result.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workbookId": {
+                    "type": "string"
+                  },
+                  "worksheetId": {
+                    "type": "string"
+                  },
+                  "formula": {
+                    "type": "string"
+                  }
+                },
+                "required": ["workbookId", "worksheetId", "formula"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Formula evaluated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/charts": {
+      "get": {
+        "summary": "List charts",
+        "description": "Retrieve a list of charts in a worksheet.",
+        "parameters": [
+          {
+            "name": "workbookId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "worksheetId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Chart"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create chart",
+        "description": "Create a new chart in a worksheet.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChartCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Chart created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chart"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Workbook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "WorkbookCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"]
+      },
+      "WorkbookUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Worksheet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          }
+        }
+      },
+      "WorksheetCreate": {
+        "type": "object",
+        "properties": {
+          "workbookId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["workbookId", "name"]
+      },
+      "Cell": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "formula": {
+            "type": "string"
+          }
+        }
+      },
+      "Chart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["bar", "line", "pie", "scatter", "area"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "dataRange": {
+            "type": "string"
+          }
+        }
+      },
+      "ChartCreate": {
+        "type": "object",
+        "properties": {
+          "workbookId": {
+            "type": "string"
+          },
+          "worksheetId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["bar", "line", "pie", "scatter", "area"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "dataRange": {
+            "type": "string"
+          }
+        },
+        "required": ["workbookId", "worksheetId", "type", "title", "dataRange"]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
+```
+
+Human Tasks:
+```
+// TODO: Review and validate the API endpoints and their descriptions
+// TODO: Ensure all request/response schemas are accurately defined
+// TODO: Verify that the security scheme is correctly implemented
+// TODO: Add detailed request/response examples for each endpoint
+// TODO: Include any API rate limiting information

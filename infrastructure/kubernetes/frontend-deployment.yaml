@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: excel-frontend
+  labels:
+    app: excel
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: excel
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: excel
+        tier: frontend
+    spec:
+      containers:
+      - name: excel-frontend
+        image: {{CONTAINER_REGISTRY}}/excel-frontend:{{VERSION}}
+        ports:
+        - containerPort: 80
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: excel-config
+              key: api_url
+        - name: NODE_ENV
+          value: production
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+# Human tasks:
+# - Replace {{CONTAINER_REGISTRY}} with the actual container registry URL
+# - Replace {{VERSION}} with the appropriate version tag or use a CI/CD pipeline to inject the correct version
+# - Ensure the excel-config ConfigMap is created with the appropriate api_url
+# - Verify and adjust resource requests and limits based on actual application requirements
+# - Implement health check endpoints (/healthz and /ready) in the frontend application
+# - Consider implementing horizontal pod autoscaling based on CPU/memory usage or custom metrics

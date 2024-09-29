@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Formula Bar -->
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/formulaBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/formula_bar_hint"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Spreadsheet Grid -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cellsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="horizontal|vertical"
+        app:layout_constraintTop_toBottomOf="@id/formulaBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Pending Human Tasks (Commented) -->
+    <!--
+    TODO: Implement the following tasks:
+    1. [Required] Implement custom item decorations for grid lines in the RecyclerView
+    2. [Required] Add column headers and row numbers to the spreadsheet layout
+    3. [Required] Implement a custom view for cell selection and range highlighting
+    4. [Required] Add zoom controls or implement pinch-to-zoom functionality
+    5. [Optional] Implement a floating action button or toolbar for common spreadsheet actions
+    -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

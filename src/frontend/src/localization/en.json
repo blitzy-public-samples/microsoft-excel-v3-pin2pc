@@ -1,0 +1,111 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "close": "Close",
+    "confirm": "Confirm",
+    "apply": "Apply",
+    "reset": "Reset"
+  },
+  "spreadsheet": {
+    "newSheet": "New Sheet",
+    "deleteSheet": "Delete Sheet",
+    "renameSheet": "Rename Sheet",
+    "copySheet": "Copy Sheet",
+    "moveSheet": "Move Sheet",
+    "protectSheet": "Protect Sheet",
+    "unprotectSheet": "Unprotect Sheet",
+    "hideSheet": "Hide Sheet",
+    "unhideSheet": "Unhide Sheet"
+  },
+  "formulaBar": {
+    "enterFormula": "Enter a formula",
+    "insertFunction": "Insert Function",
+    "formulaError": "Formula Error",
+    "calculateNow": "Calculate Now"
+  },
+  "toolbar": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "alignLeft": "Align Left",
+    "alignCenter": "Align Center",
+    "alignRight": "Align Right",
+    "fontFamily": "Font Family",
+    "fontSize": "Font Size",
+    "fontColor": "Font Color",
+    "fillColor": "Fill Color",
+    "borders": "Borders",
+    "mergeAndCenter": "Merge & Center",
+    "numberFormat": "Number Format",
+    "conditionalFormatting": "Conditional Formatting"
+  },
+  "charts": {
+    "createChart": "Create Chart",
+    "editChart": "Edit Chart",
+    "deleteChart": "Delete Chart",
+    "chartTypes": {
+      "bar": "Bar Chart",
+      "line": "Line Chart",
+      "pie": "Pie Chart",
+      "scatter": "Scatter Chart",
+      "area": "Area Chart",
+      "column": "Column Chart",
+      "doughnut": "Doughnut Chart",
+      "radar": "Radar Chart"
+    },
+    "chartElements": {
+      "title": "Title",
+      "legend": "Legend",
+      "dataLabels": "Data Labels",
+      "axis": "Axis",
+      "gridLines": "Grid Lines"
+    }
+  },
+  "dialogs": {
+    "saveChanges": "Do you want to save changes?",
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "unsavedChanges": "You have unsaved changes. Do you want to save before closing?",
+    "renameSheet": "Enter new sheet name:",
+    "protectSheet": "Enter password to protect sheet:",
+    "unprotectSheet": "Enter password to unprotect sheet:"
+  },
+  "errors": {
+    "formulaError": "There's an error in the formula",
+    "networkError": "Unable to connect to the server",
+    "fileNotFound": "File not found",
+    "accessDenied": "Access denied",
+    "invalidInput": "Invalid input",
+    "dataValidationError": "Data validation error"
+  },
+  "menu": {
+    "file": "File",
+    "edit": "Edit",
+    "view": "View",
+    "insert": "Insert",
+    "format": "Format",
+    "data": "Data",
+    "tools": "Tools",
+    "help": "Help"
+  },
+  "fileOperations": {
+    "new": "New",
+    "open": "Open",
+    "save": "Save",
+    "saveAs": "Save As",
+    "export": "Export",
+    "print": "Print",
+    "close": "Close"
+  },
+  "dataOperations": {
+    "sort": "Sort",
+    "filter": "Filter",
+    "grouping": "Grouping",
+    "pivotTable": "Pivot Table",
+    "dataValidation": "Data Validation"
+  }
+}

@@ -1,0 +1,29 @@
+rootProject.name = 'ExcelMobile'
+include ':app'
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == 'com.android' || requested.id.name == 'kotlin-android-extensions') {
+                useModule("com.android.tools.build:gradle:${requested.version}")
+            }
+        }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// TODO: Verify that all necessary modules are included in the project
+// TODO: Ensure that the rootProject name 'ExcelMobile' is correct and consistent with other project configurations
+// TODO: Consider adding version catalogs for centralized dependency management

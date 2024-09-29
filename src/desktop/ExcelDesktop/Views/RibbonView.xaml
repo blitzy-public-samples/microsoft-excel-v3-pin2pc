@@ -1,0 +1,81 @@
+<RibbonWindow x:Class="ExcelDesktop.Views.RibbonView"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:local="clr-namespace:ExcelDesktop.Views"
+              xmlns:vm="clr-namespace:ExcelDesktop.ViewModels"
+              Title="Excel Desktop" Height="450" Width="800">
+    
+    <RibbonWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ExcelDesktop;component/Resources/Styles.xaml"/>
+                <ResourceDictionary Source="/ExcelDesktop;component/Resources/Icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </RibbonWindow.Resources>
+
+    <RibbonWindow.DataContext>
+        <vm:RibbonViewModel/>
+    </RibbonWindow.DataContext>
+
+    <Grid>
+        <Ribbon>
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu>
+                    <!-- Add application menu items here -->
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+
+            <RibbonTab Header="Home">
+                <RibbonGroup Header="Clipboard">
+                    <RibbonButton Label="Paste" LargeImageSource="{StaticResource PasteIcon}" Command="{Binding PasteCommand}"/>
+                    <RibbonButton Label="Cut" SmallImageSource="{StaticResource CutIcon}" Command="{Binding CutCommand}"/>
+                    <RibbonButton Label="Copy" SmallImageSource="{StaticResource CopyIcon}" Command="{Binding CopyCommand}"/>
+                </RibbonGroup>
+
+                <RibbonGroup Header="Font">
+                    <RibbonComboBox Label="Font Family" ItemsSource="{Binding FontFamilies}" SelectedItem="{Binding SelectedFontFamily}"/>
+                    <RibbonComboBox Label="Font Size" ItemsSource="{Binding FontSizes}" SelectedItem="{Binding SelectedFontSize}"/>
+                    <RibbonToggleButton Label="Bold" SmallImageSource="{StaticResource BoldIcon}" IsChecked="{Binding IsBoldSelected}"/>
+                    <RibbonToggleButton Label="Italic" SmallImageSource="{StaticResource ItalicIcon}" IsChecked="{Binding IsItalicSelected}"/>
+                    <RibbonToggleButton Label="Underline" SmallImageSource="{StaticResource UnderlineIcon}" IsChecked="{Binding IsUnderlineSelected}"/>
+                </RibbonGroup>
+
+                <RibbonGroup Header="Alignment">
+                    <RibbonButton SmallImageSource="{StaticResource AlignLeftIcon}" Command="{Binding AlignLeftCommand}"/>
+                    <RibbonButton SmallImageSource="{StaticResource AlignCenterIcon}" Command="{Binding AlignCenterCommand}"/>
+                    <RibbonButton SmallImageSource="{StaticResource AlignRightIcon}" Command="{Binding AlignRightCommand}"/>
+                </RibbonGroup>
+
+                <RibbonGroup Header="Number">
+                    <RibbonButton SmallImageSource="{StaticResource CurrencyIcon}" Command="{Binding FormatAsCurrencyCommand}"/>
+                    <RibbonButton SmallImageSource="{StaticResource PercentIcon}" Command="{Binding FormatAsPercentCommand}"/>
+                    <RibbonButton SmallImageSource="{StaticResource CommaIcon}" Command="{Binding FormatWithCommasCommand}"/>
+                </RibbonGroup>
+            </RibbonTab>
+
+            <RibbonTab Header="Insert">
+                <RibbonGroup Header="Tables">
+                    <RibbonButton Label="Table" LargeImageSource="{StaticResource TableIcon}" Command="{Binding InsertTableCommand}"/>
+                    <RibbonButton Label="PivotTable" LargeImageSource="{StaticResource PivotTableIcon}" Command="{Binding InsertPivotTableCommand}"/>
+                </RibbonGroup>
+
+                <RibbonGroup Header="Charts">
+                    <RibbonButton Label="Column" LargeImageSource="{StaticResource ColumnChartIcon}" Command="{Binding InsertColumnChartCommand}"/>
+                    <RibbonButton Label="Line" LargeImageSource="{StaticResource LineChartIcon}" Command="{Binding InsertLineChartCommand}"/>
+                    <RibbonButton Label="Pie" LargeImageSource="{StaticResource PieChartIcon}" Command="{Binding InsertPieChartCommand}"/>
+                </RibbonGroup>
+            </RibbonTab>
+
+            <RibbonTab Header="Formulas">
+                <RibbonGroup Header="Function Library">
+                    <RibbonButton Label="Insert Function" LargeImageSource="{StaticResource FunctionIcon}" Command="{Binding InsertFunctionCommand}"/>
+                    <RibbonButton Label="AutoSum" LargeImageSource="{StaticResource AutoSumIcon}" Command="{Binding AutoSumCommand}"/>
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+
+        <!-- Add content area for spreadsheet view -->
+        <ContentControl Content="{Binding SpreadsheetView}" Margin="0,120,0,0"/>
+    </Grid>
+</RibbonWindow>

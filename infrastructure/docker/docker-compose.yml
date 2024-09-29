@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/api.Dockerfile
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - AZURE_STORAGE_CONNECTION_STRING=${AZURE_STORAGE_CONNECTION_STRING}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - ../../src/api:/app/src
+    networks:
+      - excel-network
+
+  frontend:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/frontend.Dockerfile
+    environment:
+      - REACT_APP_API_URL=http://api:3000
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - excel-network
+
+  database:
+    image: mcr.microsoft.com/azure-sql-edge
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - excel-db-data:/var/opt/mssql
+    networks:
+      - excel-network
+
+volumes:
+  excel-db-data:
+    # Persistent volume for database data
+
+networks:
+  excel-network:
+    # Internal network for Excel services
+
+# Human tasks:
+# TODO: Review and adjust environment variables and connection strings
+# TODO: Ensure that the Dockerfile paths are correct and the files exist
+# TODO: Verify that the ports specified do not conflict with other services on the host machine
+# TODO: Confirm that the database image and version are appropriate for the project requirements

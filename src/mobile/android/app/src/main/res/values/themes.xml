@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.ExcelMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/excel_green</item>
+        <item name="colorPrimaryVariant">@color/excel_dark_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/excel_blue</item>
+        <item name="colorSecondaryVariant">@color/excel_dark_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Status bar and navigation bar colors -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryVariant</item>
+        
+        <!-- Status bar and navigation bar icon colors -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        
+        <!-- Default font family -->
+        <item name="fontFamily">@font/segoe_ui</item>
+    </style>
+
+    <!-- Theme for Excel cells -->
+    <style name="Theme.ExcelMobile.Cell" parent="Theme.ExcelMobile">
+        <item name="android:textColor">@color/cell_text</item>
+        <item name="android:background">@color/cell_background</item>
+    </style>
+
+    <!-- Theme for formula bar -->
+    <style name="Theme.ExcelMobile.FormulaBar" parent="Theme.ExcelMobile">
+        <item name="android:textColor">@color/formula_bar_text</item>
+        <item name="android:background">@color/formula_bar_background</item>
+    </style>
+
+    <!-- Theme for toolbar -->
+    <style name="Theme.ExcelMobile.Toolbar" parent="Theme.ExcelMobile">
+        <item name="android:background">@color/toolbar_background</item>
+        <item name="colorControlNormal">@color/toolbar_icon</item>
+    </style>
+
+    <!-- TODO: Verify that the color scheme matches the latest Excel brand guidelines -->
+    <!-- TODO: Ensure that the Segoe UI font is properly licensed and included in the project -->
+    <!-- TODO: Test the themes on various Android devices and screen sizes for consistency -->
+</resources>

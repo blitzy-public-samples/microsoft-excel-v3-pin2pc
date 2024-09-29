@@ -1,0 +1,40 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Default style for all TextBlock elements -->
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Style for the main application window -->
+    <Style x:Key="MainWindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="#FFFFFF" />
+    </Style>
+
+    <!-- Style for the Excel grid cells -->
+    <Style x:Key="CellStyle" TargetType="{x:Type DataGridCell}">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+    </Style>
+
+    <!-- Style for the formula bar -->
+    <Style x:Key="FormulaBarStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <!-- Style for the ribbon buttons -->
+    <Style x:Key="RibbonButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Margin" Value="2" />
+    </Style>
+
+    <!-- Human Tasks:
+    1. Review and adjust color scheme to match Microsoft's Fluent Design System
+    2. Ensure all styles are accessible and meet WCAG 2.1 AA standards
+    3. Add styles for dark mode support (Optional)
+    -->
+
+</ResourceDictionary>

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: excel-frontend-service
+  labels:
+    app: excel
+    tier: frontend
+spec:
+  selector:
+    app: excel
+    tier: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# Human Tasks:
+# TODO: Verify that the selector matches the labels in the frontend deployment
+# TODO: Ensure that the service port (80) matches the containerPort in the frontend deployment
+# TODO: Consider changing the service type to LoadBalancer or NodePort if direct external access is required without an Ingress
+# TODO: Add any necessary annotations for cloud provider-specific configurations

@@ -1,0 +1,36 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit"
+  },
+  "spreadsheet": {
+    "newWorkbook": "New Workbook",
+    "newSheet": "New Sheet",
+    "cellPlaceholder": "Enter value"
+  },
+  "formula": {
+    "enterFormula": "Enter formula",
+    "formulaError": "Formula Error"
+  },
+  "chart": {
+    "createChart": "Create Chart",
+    "chartTypes": {
+      "bar": "Bar Chart",
+      "line": "Line Chart",
+      "pie": "Pie Chart"
+    }
+  },
+  "errors": {
+    "networkError": "Network Error",
+    "dataLoadError": "Error loading data",
+    "saveFailed": "Failed to save"
+  },
+  "settings": {
+    "language": "Language",
+    "theme": "Theme",
+    "sync": "Sync"
+  }
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="?attr/colorSurface"
+    android:elevation="4dp">
+
+    <ImageButton
+        android:id="@+id/btnInsertFunction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_function"
+        android:contentDescription="@string/insert_function"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp" />
+
+    <EditText
+        android:id="@+id/etFormulaInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/enter_formula"
+        android:inputType="text"
+        android:background="@null"
+        android:padding="8dp"
+        android:textAppearance="@style/TextAppearance.ExcelMobile.FormulaBar" />
+
+    <ImageButton
+        android:id="@+id/btnConfirmFormula"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_confirm"
+        android:contentDescription="@string/confirm_formula"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp" />
+
+</LinearLayout>

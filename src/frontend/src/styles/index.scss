@@ -1,0 +1,70 @@
+// Import theme variables
+@import 'theme';
+
+// Import global styles
+@import 'global';
+
+// Import component styles
+@import 'components/layout/header';
+@import 'components/layout/sidebar';
+@import 'components/layout/footer';
+@import 'components/spreadsheet/cell';
+@import 'components/spreadsheet/grid';
+@import 'components/spreadsheet/formula-bar';
+@import 'components/spreadsheet/toolbar';
+@import 'components/charts/chart';
+@import 'components/pivot-table/pivot-table';
+@import 'components/dialogs/file-dialog';
+@import 'components/dialogs/format-dialog';
+@import 'components/dialogs/chart-dialog';
+
+// Global styles
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+// Add any other global styles here
+
+// Flexbox utilities
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+// Spacing utilities
+.m-1 {
+  margin: $spacing-unit;
+}
+
+.p-1 {
+  padding: $spacing-unit;
+}
+
+// Add more utility classes as needed
+
+// Responsive breakpoints
+@media (max-width: $breakpoint-sm) {
+  // Styles for small screens
+}
+
+@media (min-width: $breakpoint-md) {
+  // Styles for medium screens
+}
+
+@media (min-width: $breakpoint-lg) {
+  // Styles for large screens
+}
+
+// Human tasks (commented)
+/*
+TODO: Review the overall structure of the stylesheet to ensure it follows best practices for large-scale applications
+TODO: Verify that all necessary component styles are imported and organized correctly
+TODO: Ensure that the stylesheet is optimized for performance, considering factors like selector specificity and reusability
+*/

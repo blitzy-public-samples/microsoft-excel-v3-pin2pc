@@ -1,0 +1,22 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [ "main" ]  # Assuming the default branch is "main"
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+
+# Human tasks:
+# TODO: Review and adjust the dependency review action configuration if needed (Optional)
+# TODO: Set up branch protection rules to require passing dependency review checks (Required)

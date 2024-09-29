@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: excel-api
+  labels:
+    app: excel-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: excel-api
+  template:
+    metadata:
+      labels:
+        app: excel-api
+    spec:
+      containers:
+      - name: excel-api
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: excel-secrets
+              key: database-url
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+# Human tasks:
+# - Review and adjust resource limits based on actual API performance and load testing results
+# - Ensure that the health and readiness check endpoints (/health and /ready) are implemented in the API
+# - Verify that the excel-secrets Kubernetes Secret is created with the correct database-url
